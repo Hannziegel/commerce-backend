@@ -9,6 +9,9 @@ gem "rails", "~> 7.0.4", ">= 7.0.4.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
+# Password and .env 
+gem 'dotenv-rails'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
