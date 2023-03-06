@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_06_200735) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,10 +21,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
     t.string "street"
     t.integer "house_number"
     t.integer "zip_code"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
   create_table "carts", force: :cascade do |t|
@@ -51,7 +49,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "order_id", null: false
     t.index ["address_id"], name: "index_inventories_on_address_id"
+    t.index ["order_id"], name: "index_inventories_on_order_id"
     t.index ["product_id"], name: "index_inventories_on_product_id"
   end
 
@@ -63,6 +63,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "inventory_id", null: false
+    t.index ["inventory_id"], name: "index_orders_on_inventory_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -72,6 +74,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "inventory_id", null: false
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["inventory_id"], name: "index_products_on_inventory_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -86,13 +92,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_06_195047) do
     t.index ["order_id"], name: "index_users_on_order_id"
   end
 
-  add_foreign_key "addresses", "users"
   add_foreign_key "carts", "inventories"
   add_foreign_key "carts", "users"
   add_foreign_key "categories", "products"
   add_foreign_key "inventories", "addresses"
+  add_foreign_key "inventories", "orders"
   add_foreign_key "inventories", "products"
+  add_foreign_key "orders", "inventories"
   add_foreign_key "orders", "users"
+  add_foreign_key "products", "categories"
+  add_foreign_key "products", "inventories"
   add_foreign_key "users", "addresses"
   add_foreign_key "users", "carts"
   add_foreign_key "users", "orders"
