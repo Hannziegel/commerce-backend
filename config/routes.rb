@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :inventories
+  resources :categories
+  resources :products
   resources :addresses
   resources :orders
   resources :users
